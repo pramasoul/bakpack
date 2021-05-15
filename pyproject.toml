@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "bakpack"
+version = "0.1.0"
+description = ""
+authors = ["Tom Soulanille <soul@prama.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+ortools = "^9.0.9048"
+mypy = "^0.812"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[tool.poetry.scripts]
+bakpack = "bakpack.main:entry"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
