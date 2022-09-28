@@ -5,15 +5,17 @@ from typing import Union
 def binpack(capacity: int, weights: list) -> Union[None, list[list[int]]]:
     """Pack widgets into minimum number of bins
 
-    OBS: widgets is a set of tuples of (size, qty)
-    weights is a list of sizes
+    capacity is the size of a bin
+    weights is a list of widget sizes
 
+    returns the weights arranged in separate lists,
+      each summing to no more than capacity
     """
     n_widgets = len(weights)
     # We allow for one bin per item so as to cover all solvable cases
     n_bins = n_widgets
 
-    # from https://developers.google.com/optimization/bin/bin_packing#python_7
+    # After https://developers.google.com/optimization/bin/bin_packing#python_7
 
     # Create the mip solver with the SCIP backend.
     solver = pywraplp.Solver.CreateSolver("SCIP")
