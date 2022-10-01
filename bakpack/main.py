@@ -68,7 +68,61 @@ def get_outfile():
 
 
 def overall_preamble(f):
-    f.write("# Some overall preamble\n")
+    f.write(\
+"""#!/bin/bash
+
+# Overall preamble:
+
+function usage() {
+      echo "script usage: sudo $(basename $0) [-h] [-v] [-f norewind-tapedrive] [-x changer]" >&2
+}
+
+run_as=${BASH_SOURCE}
+verbose=false
+
+while getopts 'f:x:hv' OPTION; do
+  case "$OPTION" in
+    f)
+      nrst="$OPTARG"
+      ;;
+    x)
+      sg="$OPTARG"
+      ;;
+    h)
+      usage
+      exit 1
+      ;;
+    v)
+      verbose=true
+      ;;
+    ?)
+      usage
+      exit 1
+      ;;
+  esac
+done
+shift "$(($OPTIND -1))"
+
+if [[ $nrst == "" || $sg == "" ]] ; then
+    echo "Please specify both the no-rewind tape drive (with -f) and the tape changer (with -x)"
+    echo "Hint: ls -l /dev/tape/by-path/ says"
+    ls -l /dev/tape/by-path/
+    exit 1
+fi
+
+
+if [[ `/usr/bin/id -u` != 0 ]] ; then
+    echo "Please run with root privileges. Write access to the tape drive and changer is required."
+    exit
+fi
+
+if [ "$verbose" = true ] ; then
+    echo "run as $run_as"
+fi
+
+# End overall preamble
+""")
+
 
 def tape_preamble(f):
     f.write(f"# Some preamble to a particular tape\n")
